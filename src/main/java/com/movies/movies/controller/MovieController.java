@@ -2,6 +2,8 @@ package com.movies.movies.controller;
 
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.movies.movies.dto.TMovie;
 import com.movies.movies.entity.Movie;
 import com.movies.movies.services.MovieService;
 
@@ -29,13 +31,13 @@ public class MovieController {
     }
 
     @GetMapping("/movies")
-    public List<Movie> getAll(){
-        return this.movieService.findAll();
+    public String getAll(){
+        return new Gson().toJson(this.movieService.findAll());
     }
 
     @GetMapping("/movies/{id}")
-    public Movie getById(@PathVariable int id) {
-        return this.movieService.findById(id);
+    public String getById(@PathVariable int id) {
+        return new Gson().toJson(this.movieService.findById(id));
     }
 
     /*@PostMapping("/login")
@@ -44,18 +46,14 @@ public class MovieController {
     }*/
 
     @PostMapping("/movies")
-    public Movie createMovie(@RequestBody Movie movie) {
-        movie.setId(0);
-        movieService.saveMovie(movie);
-
-        return movie;
+    public String createMovie(@RequestBody TMovie movie) {
+        return new Gson().toJson(movieService.saveMovie(movie));
     }
 
     @PutMapping("/movies")
     @ResponseStatus( code = HttpStatus.OK, reason = "Guardado exitosamente")
-    public Movie updateMovie(@RequestBody Movie movie) { 
-        movieService.saveMovie(movie);
-        return movie;
+    public String updateMovie(@RequestBody TMovie tMovie) {
+        return new Gson().toJson(movieService.saveMovie(tMovie));
     }
 
     @DeleteMapping("/movies/{id}")

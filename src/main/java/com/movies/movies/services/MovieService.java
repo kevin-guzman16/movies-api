@@ -1,9 +1,11 @@
 package com.movies.movies.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.movies.movies.dao.MovieRepository;
+import com.movies.movies.dto.TMovie;
 import com.movies.movies.entity.Movie;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,23 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    public List<Movie> findAll(){
-        return movieRepository.findAll();
+    public List<TMovie> findAll(){
+        List<TMovie> listMovies = new ArrayList<TMovie>();
+        movieRepository.findAll().forEach(movie -> listMovies.add(movie.toTransfer()));
+        return listMovies;
     }
 
-    public Movie findById(int theId){
+    public TMovie findById(int theId){
         Optional<Movie> result = movieRepository.findById(theId);
         Movie movie = null;
         if(result.isPresent()){
             movie = result.get();
         }
-        return movie;
+        return movie.toTransfer();
     }
 
-    public void saveMovie(Movie movie) {
-        movieRepository.save(movie);
+    public TMovie saveMovie(TMovie movie) {
+        return movie;
     }
 
     public void deleteMovieById(int theId) {

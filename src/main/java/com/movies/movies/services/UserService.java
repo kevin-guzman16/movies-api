@@ -1,8 +1,10 @@
 package com.movies.movies.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.movies.movies.dao.UserRepository;
+import com.movies.movies.dto.TUser;
 import com.movies.movies.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,12 @@ public class UserService {
         this.userRepository=userRepository;
     }
 
-    public List<User> findAll() {
-        return this.userRepository.findAll();
+    public List<TUser> findAll() {
+        List<User> users = this.userRepository.findAll();
+        List<TUser> listUsers = new ArrayList<>();
+        for(User u : users) {
+            listUsers.add(u.toTransfer());
+        }
+        return listUsers;
     }
 }

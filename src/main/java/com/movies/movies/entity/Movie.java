@@ -1,5 +1,8 @@
 package com.movies.movies.entity;
 
+import com.movies.movies.dto.TMovie;
+import lombok.Data;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="movie")
+@Data
 public class Movie {
 
     @Id
@@ -21,12 +25,11 @@ public class Movie {
     private int id;
 
     @ManyToOne(cascade={CascadeType.MERGE,
-        CascadeType.DETACH, 
+        CascadeType.DETACH,
         CascadeType.PERSIST,
         CascadeType.REFRESH},
         fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
-    
     private User userMovie;
 
     @Column(name="title")
@@ -45,68 +48,17 @@ public class Movie {
         
     }
 
-    public Movie(int id, User user_id, String title, String synopsis, int year, String cover) {
+    public Movie(int id, String title, String synopsis, int year, String cover) {
         this.id = id;
-        this.userMovie = user_id;
         this.title = title;
         this.synopsis = synopsis;
         this.year = year;
         this.cover = cover;
     }
 
-    public int getId() {
-        return id;
+    public TMovie toTransfer() {
+        return new TMovie(this.id, this.userMovie.getId(), this.title, this.synopsis, this.year, this.cover);
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public User getUser() {
-        return this.userMovie ;
-    }
-
-    public void setUser(User user) {
-        this.userMovie = user;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSynopsis() {
-        return synopsis;
-    }
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getCover() {
-        return cover;
-    }
-
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie [cover=" + cover + ", id=" + id + ", synopsis=" + synopsis + ", title=" + title + ", user=" + userMovie
-                + ", year=" + year + "]";
-    }
-
-    
 }
